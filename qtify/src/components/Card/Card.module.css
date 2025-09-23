@@ -1,0 +1,51 @@
+.card {
+  /* This ensures the card has a fixed width and acts as a flex container */
+  display: flex;
+  flex-direction: column;
+  width: 160px; /* Adjust as needed */
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  background-color: var(--card-background-color, #fff); /* Default color, can be customized */
+}
+
+.albumImage {
+  /* This gives the image a fixed aspect ratio and ensures it fills its container */
+  width: 100%;
+  height: 160px; /* Same as width to maintain 1:1 ratio */
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+}
+
+.cardContent {
+  padding: 8px !important;
+  position: absolute; /* Position the chip over the image */
+  top: 8px;
+  left: 8px;
+}
+
+.chip {
+  background-color: var(--chip-background-color, #121212);
+  color: var(--chip-text-color, #fff);
+  font-size: 10px !important;
+  padding: 2px 8px !important;
+  border-radius: 10px !important;
+  height: auto;
+}
+
+.titleContainer {
+  /* This container handles the layout for the album title */
+  padding: 8px;
+  background-color: var(--title-bg-color, #fff);
+  border-radius: 0 0 12px 12px;
+}
+
+.albumTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--title-text-color, #000);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ensures long titles are truncated */
+}

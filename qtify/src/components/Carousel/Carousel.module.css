@@ -1,0 +1,25 @@
+.carouselContainer {
+  position: relative;
+  padding: 0 40px; /* Space for the navigation buttons */
+}
+
+.swiper-container {
+  overflow: visible; /* Allows the navigation buttons to be outside */
+}
+
+.swiperButtonPrev,
+.swiperButtonNext {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.swiperButtonPrev {
+  left: 0;
+}
+
+.swiperButtonNext {
+  right: 0;
+}

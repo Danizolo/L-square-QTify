@@ -12,7 +12,7 @@
  **/
 import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
+import Home from "./Views/Home";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
       <BrowserRouter>
         <div className="flex flex-col items-center h-screen bg-gray-100 p-4">
           <Routes>
-            <Route path="/" element={<Navbar />} />
+            <Route path="/" element={<Home />} />
             {/* <Route path="/about" element={<AboutPage />} /> */}
           </Routes>
         </div>

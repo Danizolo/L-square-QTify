@@ -1,0 +1,55 @@
+.sectionContainer {
+  margin-top: 40px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.collapseButton {
+  background: none;
+  border: none;
+  color: #34c94b;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 24px;
+}
+
+/* Custom styles for Material UI Tabs */
+.tabsContainer {
+  margin-bottom: 20px;
+}
+
+.tabsContainer .MuiTabs-indicator {
+  background-color: var(--primary-color, #34c94b) !important;
+  height: 4px;
+  border-radius: 4px;
+}
+
+.tab {
+  color: #fff !important;
+  text-transform: capitalize !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  min-width: 100px !important;
+}
+
+.tab.Mui-selected {
+  color: var(--primary-color, #34c94b) !important;
+}

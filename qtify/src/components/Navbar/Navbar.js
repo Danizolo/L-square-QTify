@@ -2,13 +2,25 @@
  * @description      :
  * @author           : DHANUSH
  * @group            :
- * @created          : 23/09/2025 - 13:30:30
+ * @created          : 23/09/2025 - 16:33:01
  *
  * MODIFICATION LOG
  * - Version         : 1.0.0
  * - Date            : 23/09/2025
  * - Author          : DHANUSH
  * - Modification    :
+ **/
+/**
+ * @description      :
+ * @author           : DHANUSH
+ * @group            :
+ * @created          : 23/09/2025 - 13:30:30
+ *
+ * MODIFICATION LOG
+ * - Version         : 1.0.0
+ * - Date            : 23/09/2025
+ * - Author          : DHANUSH
+ * - Modification    :
  **/
 import React from "react";
 import { Link } from "react-router-dom";
@@ -19,16 +31,22 @@ import styles from "./Navbar.module.css";
 
 function Navbar({ searchData }) {
   return (
-    // <div>Hello</div>
     <nav className={styles.navbar}>
-      <Link to="/">
-        <Logo />
-      </Link>
-      <Search
-        placeholder="Search a song of your choice"
-        searchData={searchData}
-      />
-      <Button>Give Feedback</Button>
+      <div>
+        <Link to="/">
+          <Logo />
+        </Link>
+      </div>
+
+      <div>
+        <Search
+          placeholder="Search a song of your choice"
+          searchData={searchData}
+        />
+      </div>
+      <div>
+        <Button text="Give Feedback" />
+      </div>
     </nav>
   );
 }
