@@ -21,7 +21,7 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
   const [data, setData] = useState([]);
   const [genres, setGenres] = useState([{ key: 'all', label: 'All' }]);
   const [selectedGenre, setSelectedGenre] = useState('all');
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [filteredSongs, setFilteredSongs] = useState([]);
 
   useEffect(() => {
