@@ -13,19 +13,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../Button";
-import Logo from "../../assets/logo.png";
+import Logo from "../Logo/Logo";
 import Search from "../Search/Search";
 import styles from "./Navbar.module.css";
 
 function Navbar({ searchData }) {
   return (
+    // <div>Hello</div>
     <nav className={styles.navbar}>
       <Link to="/">
         <Logo />
       </Link>
       <Search
         placeholder="Search a song of your choice"
-        searchData={searchData}
+        // searchData={searchData}
       />
       <Button>Give Feedback</Button>
     </nav>
