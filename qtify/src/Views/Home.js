@@ -14,11 +14,14 @@ import React from "react";
 import Section from "../components/Section/Section";
 import styles from "./Home.module.css";
 import Navbar from "../components/Navbar/Navbar";
+import Hero from "../components/Hero/Hero";
 
 const Home = () => {
   return (
     <div className={styles.homePage}>
       <Navbar />
+      {/* Hero section */}
+      <Hero />
       <Section
         title="Top Albums"
         apiUrl="https://qtify-backend-labs.crio.do/albums/top"
