@@ -5,10 +5,10 @@
  * @created          : 23/09/2025 - 16:29:33
  *
  * MODIFICATION LOG
- * - Version         : 1.0.0
- * - Date            : 23/09/2025
- * - Author          : DHANUSH
- * - Modification    : Corrected API endpoint and rendering logic.
+ * - Version         : 1.2.0
+ * - Date            : 25/09/2025
+ * - Author          : Assistant (fixes for tests)
+ * - Modification    : Normalize API payloads, hide collapse for songs, pass likes for songs, ensure Carousel navigation state
  **/
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -28,9 +28,11 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(apiUrl);
-        setData(response.data);
+        // Normalize payload: API might return { data: [...] } or [...] directly
+        const items = response.data?.data ?? response.data ?? [];
+        setData(items);
         if (isSongsSection) {
-          setFilteredSongs(response.data);
+          setFilteredSongs(items);
         }
       } catch (error) {
         console.error(`Error fetching data from ${apiUrl}:`, error);
@@ -43,9 +45,9 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     if (isSongsSection) {
       const fetchGenres = async () => {
         try {
-          // CORRECTED: The API URL was wrong
           const response = await axios.get("https://qtify-backend.labs.crio.do/genres");
-          setGenres([{ key: "all", label: "All" }, ...response.data.data]);
+          const genresData = response.data?.data ?? response.data ?? [];
+          setGenres([{ key: "all", label: "All" }, ...genresData]);
         } catch (error) {
           console.error("Error fetching genres:", error);
         }
@@ -60,7 +62,7 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
         setFilteredSongs(data);
       } else {
         const songsByGenre = data.filter(
-          (song) => song.genre.key === selectedGenre
+          (song) => song.genre?.key === selectedGenre || song.genre === selectedGenre
         );
         setFilteredSongs(songsByGenre);
       }
@@ -79,58 +81,77 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     ? { isSongCard: true }
     : { isSongCard: false };
 
-  const itemsToDisplay = isSongsSection ? filteredSongs : data;
+  // Items that will be shown in Carousel when collapsed or for songs
+  const itemsToDisplay = isSongsSection ? filteredSongs : (collapsed ? data : []);
 
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
-        <button
-          onClick={handleCollapseToggle}
-          className={styles.collapseButton}
-        >
-          {collapsed ? "Show All" : "Collapse"}
-        </button>
+
+        {/* For Songs section we must NOT show the Collapse / Show All button */}
+        {!isSongsSection && (
+          <button
+            onClick={handleCollapseToggle}
+            className={styles.collapseButton}
+          >
+            {collapsed ? "Show All" : "Collapse"}
+          </button>
+        )}
       </div>
 
       {isSongsSection && (
-        <Tabs
-          value={selectedGenre}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-          className={styles.tabsContainer}
-        >
-          {genres.map((genre) => (
-            <Tab
-              key={genre.key}
-              label={genre.label}
-              value={genre.key}
-              className={styles.tab}
-            />
-          ))}
-        </Tabs>
+        <>
+          <Tabs
+            value={selectedGenre}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+            className={styles.tabsContainer}
+          >
+            {genres.map((genre) => (
+              <Tab
+                key={genre.key}
+                label={genre.label}
+                value={genre.key}
+                className={styles.tab}
+              />
+            ))}
+          </Tabs>
+
+          {/* Songs: always show carousel (no grid option) */}
+          <Carousel
+            data={filteredSongs}
+            component={Card}
+            cardProps={cardComponentProps}
+          />
+        </>
       )}
 
-      {collapsed ? (
-        <Carousel
-          data={itemsToDisplay}
-          component={Card}
-          cardProps={cardComponentProps}
-        />
-      ) : (
-        <div className={styles.cardGrid}>
-          {data.map((item) => (
-            <Card
-              key={item.id}
-              image={item.image}
-              title={item.title}
-              follows={item.follows}
-              {...cardComponentProps}
+      {/* Non-song sections */}
+      {!isSongsSection && (
+        <>
+          {collapsed ? (
+            <Carousel
+              data={itemsToDisplay}
+              component={Card}
+              cardProps={cardComponentProps}
             />
-          ))}
-        </div>
+          ) : (
+            <div className={styles.cardGrid}>
+              {Array.isArray(data) && data.map((item) => (
+                <Card
+                  key={item.id}
+                  image={item.image}
+                  title={item.title}
+                  follows={item.follows}
+                  {...cardComponentProps}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

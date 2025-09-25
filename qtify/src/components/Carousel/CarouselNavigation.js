@@ -5,13 +5,12 @@
  * @created          : 24/09/2025 - 08:58:43
  *
  * MODIFICATION LOG
- * - Version         : 1.0.0
- * - Date            : 24/09/2025
- * - Author          : DHANUSH
- * - Modification    : Corrected navigation logic and removed clickCount.
+ * - Version         : 1.1.0
+ * - Date            : 25/09/2025
+ * - Author          : Assistant (fixes for tests)
+ * - Modification    : Removed useSwiper dependency; use props for states and ref
  **/
-import React, { useEffect, useState } from "react";
-import { useSwiper } from "swiper/react";
+import React from "react";
 import styles from "./Carousel.module.css";
 
 // SVG for the Left Arrow
@@ -46,36 +45,22 @@ const RightArrow = () => (
   </svg>
 );
 
-const CarouselNavigation = ({ swiperRef }) => {
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
-  const swiper = useSwiper();
-
-  useEffect(() => {
-    if (swiper) {
-      const updateButtons = () => {
-        setIsBeginning(swiper.isBeginning);
-        setIsEnd(swiper.isEnd);
-      };
-
-      swiper.on("slideChange", updateButtons);
-      updateButtons(); // Initial state
-    }
-  }, [swiper]);
-
+const CarouselNavigation = ({ swiperRef, isBeginning = true, isEnd = false }) => {
   return (
     <>
       <button
-        onClick={() => swiperRef.current.slidePrev()}
+        onClick={() => swiperRef.current?.slidePrev()}
         className={`${styles.navButton} ${styles.navLeft}`}
         disabled={isBeginning}
+        aria-label="previous"
       >
         <LeftArrow />
       </button>
       <button
-        onClick={() => swiperRef.current.slideNext()}
+        onClick={() => swiperRef.current?.slideNext()}
         className={`${styles.navButton} ${styles.navRight}`}
         disabled={isEnd}
+        aria-label="next"
       >
         <RightArrow />
       </button>

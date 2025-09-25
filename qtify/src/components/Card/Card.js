@@ -5,16 +5,16 @@
     * @created          : 23/09/2025 - 16:29:20
     * 
     * MODIFICATION LOG
-    * - Version         : 1.0.0
-    * - Date            : 23/09/2025
-    * - Author          : DHANUSH
-    * - Modification    : 
+    * - Version         : 1.1.0
+    * - Date            : 25/09/2025
+    * - Author          : Assistant (fixes for tests)
+    * - Modification    : defensive defaults for likes/follows, no other behavior changes
 **/
 import React from 'react';
 import { Chip, Card as MuiCard, CardContent, CardMedia } from '@mui/material';
 import styles from './Card.module.css';
 
-const Card = ({ image, title, follows, likes, isSongCard }) => {
+const Card = ({ image, title, follows = 0, likes = 0, isSongCard = false }) => {
   const chipLabel = isSongCard ? `${likes} Likes` : `${follows} Follows`;
   
   return (
