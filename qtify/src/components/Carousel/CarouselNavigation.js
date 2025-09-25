@@ -2,56 +2,110 @@
  * @description      :
  * @author           : DHANUSH
  * @group            :
- * @created          : 23/09/2025 - 16:21:51
+ * @created          : 24/09/2025 - 08:58:43
  *
  * MODIFICATION LOG
  * - Version         : 1.0.0
- * - Date            : 23/09/2025
+ * - Date            : 24/09/2025
  * - Author          : DHANUSH
  * - Modification    :
  **/
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSwiper } from "swiper/react";
 import styles from "./Carousel.module.css";
 
-const CarouselNavigation = () => {
-  const leftArrow = (
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M32 16C32 7.1875 24.8125 0 16 0C7.125 0 0 7.1875 0 16C0 24.875 7.125 32 16 32C24.8125 32 32 24.875 32 16ZM16.9375 8.4375C17.5 7.875 18.4375 7.875 19 8.4375C19.625 9.0625 19.625 10 19 10.5625L13.5625 16L19 21.4375C19.625 22.0625 19.625 23 19 23.5625C18.4375 24.1875 17.5 24.1875 16.9375 23.5625L10.4375 17.0625C9.8125 16.5 9.8125 15.5625 10.4375 15L16.9375 8.4375Z"
-        fill="#34C94B"
-      />
-    </svg>
-  );
+// SVG for the Left Arrow
+const LeftArrow = () => (
+  <svg
+    width="17"
+    height="17"
+    viewBox="0 0 17 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 1L5 8.5L12 16"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-  const rightArrow = (
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M0 16C0 24.875 7.125 32 16 32C24.8125 32 32 24.875 32 16C32 7.1875 24.8125 0 16 0C7.125 0 0 7.1875 0 16ZM15.0625 23.5625C14.4375 24.1875 13.5 24.1875 12.9375 23.5625C12.3125 23 12.3125 22.0625 12.9375 21.5L18.375 16.0625L12.9375 10.625C12.3125 10 12.3125 9.0625 12.9375 8.5C13.5 7.875 14.4375 7.875 15.0625 8.5L21.5625 14.9375C22.125 15.5625 22.125 16.5 21.5625 17.0625L15.0625 23.5625Z"
-        fill="#34C94B"
-      />
-    </svg>
-  );
+// SVG for the Right Arrow
+const RightArrow = () => (
+  <svg
+    width="17"
+    height="17"
+    viewBox="0 0 17 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5 1L12 8.5L5 16"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const CarouselNavigation = ({ swiperRef }) => {
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const swiper = useSwiper();
+
+  useEffect(() => {
+    if (swiper) {
+      const updateButtons = () => {
+        setIsBeginning(swiper.isBeginning);
+        setIsEnd(swiper.isEnd);
+      };
+
+      swiper.on("slideChange", updateButtons);
+      updateButtons(); // Initial state
+    }
+  }, [swiper]);
+
+  // We are counting how many times the user clicks the next button
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleNextClick = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+      setClickCount((prevCount) => prevCount + 1);
+    }
+  };
+
+  const handlePrevClick = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+      setClickCount((prevCount) => prevCount - 1);
+    }
+  };
+
+  const showNavButtons = clickCount < 4;
 
   return (
     <>
-      <div className={`${styles.swiperButtonPrev} swiper-button-prev`}>
-        {leftArrow}
-      </div>
-      <div className={`${styles.swiperButtonNext} swiper-button-next`}>
-        {rightArrow}
-      </div>
+      <button
+        onClick={handlePrevClick}
+        className={`${styles.navButton} ${styles.navLeft}`}
+        disabled={isBeginning}
+        style={{ display: showNavButtons ? "block" : "none" }}
+      >
+        <LeftArrow />
+      </button>
+      <button
+        onClick={handleNextClick}
+        className={`${styles.navButton} ${styles.navRight}`}
+        disabled={isEnd}
+        style={{ display: showNavButtons ? "block" : "none" }}
+      >
+        <RightArrow />
+      </button>
     </>
   );
 };

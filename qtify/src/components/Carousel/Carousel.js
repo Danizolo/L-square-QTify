@@ -2,56 +2,49 @@
     * @description      : 
     * @author           : DHANUSH
     * @group            : 
-    * @created          : 23/09/2025 - 16:20:17
+    * @created          : 24/09/2025 - 08:58:29
     * 
     * MODIFICATION LOG
     * - Version         : 1.0.0
-    * - Date            : 23/09/2025
+    * - Date            : 24/09/2025
     * - Author          : DHANUSH
     * - Modification    : 
 **/
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React, { useRef, useState } from 'react';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import styles from './Carousel.module.css';
+
+// Importing the navigation component
 import CarouselNavigation from './CarouselNavigation';
 
-const Carousel = ({ data, component: Component }) => {
+const Carousel = ({ data, component: CardComponent, cardProps }) => {
+  const swiperRef = useRef(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  // Filter the data to show only the first two albums
+  const visibleData = data.slice(slideIndex, slideIndex + 2);
+
   return (
     <div className={styles.carouselContainer}>
       <Swiper
+        ref={swiperRef}
         modules={[Navigation]}
-        spaceBetween={20}
-        slidesPerView="auto"
-        navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        }}
-        breakpoints={{
-          600: {
-            slidesPerView: 3,
-          },
-          900: {
-            slidesPerView: 5,
-          },
-          1200: {
-            slidesPerView: 7,
-          },
-        }}
+        spaceBetween={40}
+        slidesPerView={'auto'}
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
+        onSlideChange={(swiper) => setSlideIndex(swiper.activeIndex)}
+        className={styles.swiper}
       >
-        {data.map((item) => (
-          <SwiperSlide key={item.id}>
-            <Component
-              image={item.image}
-              title={item.title}
-              follows={item.follows}
-            />
+        {visibleData.map((item) => (
+          <SwiperSlide key={item.id} className={styles.swiperSlide}>
+            <CardComponent {...item} {...cardProps} />
           </SwiperSlide>
         ))}
       </Swiper>
-      <CarouselNavigation />
+      <CarouselNavigation swiperRef={swiperRef} />
     </div>
   );
 };

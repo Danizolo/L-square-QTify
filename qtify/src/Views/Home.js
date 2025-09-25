@@ -24,15 +24,15 @@ const Home = () => {
       <Hero />
       <Section
         title="Top Albums"
-        apiUrl="https://qtify-backend-labs.crio.do/albums/top"
+        apiUrl="https://qtify-backend.labs.crio.do/albums/top"
       />
       <Section
         title="New Albums"
-        apiUrl="https://qtify-backend-labs.crio.do/albums/new"
+        apiUrl="https://qtify-backend.labs.crio.do/albums/new"
       />
       <Section
         title="Songs"
-        apiUrl="https://qtify-backend-labs.crio.do/songs"
+        apiUrl="https://qtify-backend.labs.crio.do/songs"
         isSongsSection={true}
       />
     </div>

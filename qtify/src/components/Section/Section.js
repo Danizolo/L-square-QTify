@@ -1,26 +1,26 @@
 /**
-    * @description      : 
-    * @author           : DHANUSH
-    * @group            : 
-    * @created          : 23/09/2025 - 16:29:33
-    * 
-    * MODIFICATION LOG
-    * - Version         : 1.0.0
-    * - Date            : 23/09/2025
-    * - Author          : DHANUSH
-    * - Modification    : 
-**/
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Card from '../Card/Card';
-import Carousel from '../Carousel/Carousel';
-import { Tabs, Tab } from '@mui/material';
-import styles from './Section.module.css';
+ * @description      :
+ * @author           : DHANUSH
+ * @group            :
+ * @created          : 23/09/2025 - 16:29:33
+ *
+ * MODIFICATION LOG
+ * - Version         : 1.0.0
+ * - Date            : 23/09/2025
+ * - Author          : DHANUSH
+ * - Modification    :
+ **/
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Card from "../Card/Card";
+import Carousel from "../Carousel/Carousel";
+import { Tabs, Tab } from "@mui/material";
+import styles from "./Section.module.css";
 
 const Section = ({ title, apiUrl, isSongsSection = false }) => {
   const [data, setData] = useState([]);
-  const [genres, setGenres] = useState([{ key: 'all', label: 'All' }]);
-  const [selectedGenre, setSelectedGenre] = useState('all');
+  const [genres, setGenres] = useState([{ key: "all", label: "All" }]);
+  const [selectedGenre, setSelectedGenre] = useState("all");
   const [collapsed, setCollapsed] = useState(true);
   const [filteredSongs, setFilteredSongs] = useState([]);
 
@@ -43,10 +43,12 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     if (isSongsSection) {
       const fetchGenres = async () => {
         try {
-          const response = await axios.get('https://qtify-backend-labs.crio.do/genres');
-          setGenres([{ key: 'all', label: 'All' }, ...response.data.data]);
+          const response = await axios.get(
+            "https://qtify-backend.labs.crio.do/genres"
+          );
+          setGenres([{ key: "all", label: "All" }, ...response.data.data]);
         } catch (error) {
-          console.error('Error fetching genres:', error);
+          console.error("Error fetching genres:", error);
         }
       };
       fetchGenres();
@@ -55,11 +57,11 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
 
   useEffect(() => {
     if (isSongsSection) {
-      if (selectedGenre === 'all') {
+      if (selectedGenre === "all") {
         setFilteredSongs(data);
       } else {
-        const songsByGenre = data.filter(song => 
-          song.genre.key === selectedGenre
+        const songsByGenre = data.filter(
+          (song) => song.genre.key === selectedGenre
         );
         setFilteredSongs(songsByGenre);
       }
@@ -74,7 +76,9 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     setSelectedGenre(newValue);
   };
 
-  const cardComponentProps = isSongsSection ? { isSongCard: true } : { isSongCard: false };
+  const cardComponentProps = isSongsSection
+    ? { isSongCard: true }
+    : { isSongCard: false };
   const itemsToDisplay = isSongsSection ? filteredSongs : data;
 
   return (
@@ -82,8 +86,11 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
         {!isSongsSection && (
-          <button onClick={handleCollapseToggle} className={styles.collapseButton}>
-            {collapsed ? 'Show All' : 'Collapse'}
+          <button
+            onClick={handleCollapseToggle}
+            className={styles.collapseButton}
+          >
+            {collapsed ? "Show All" : "Collapse"}
           </button>
         )}
       </div>
@@ -97,7 +104,7 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
           centered
           className={styles.tabsContainer}
         >
-          {genres.map(genre => (
+          {genres.map((genre) => (
             <Tab
               key={genre.key}
               label={genre.label}
@@ -109,9 +116,9 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
       )}
 
       {isSongsSection || collapsed ? (
-        <Carousel 
-          data={itemsToDisplay} 
-          component={Card} 
+        <Carousel
+          data={itemsToDisplay}
+          component={Card}
           cardProps={cardComponentProps}
         />
       ) : (
