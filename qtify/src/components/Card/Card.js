@@ -5,10 +5,9 @@
     * @created          : 23/09/2025 - 16:29:20
     * 
     * MODIFICATION LOG
-    * - Version         : 1.1.0
+    * - Version         : 1.2.0
     * - Date            : 25/09/2025
-    * - Author          : Assistant (fixes for tests)
-    * - Modification    : defensive defaults for likes/follows, no other behavior changes
+    * - Author          : Assistant (moved chip to top center overlay)
 **/
 import React from 'react';
 import { Chip, Card as MuiCard, CardContent, CardMedia } from '@mui/material';
@@ -16,25 +15,29 @@ import styles from './Card.module.css';
 
 const Card = ({ image, title, follows = 0, likes = 0, isSongCard = false }) => {
   const chipLabel = isSongCard ? `${likes} Likes` : `${follows} Follows`;
-  
+
   return (
     <MuiCard className={styles.card}>
-      <CardMedia
-        component="img"
-        className={styles.albumImage}
-        image={image}
-        alt={title}
-      />
-      <CardContent className={styles.cardContent}>
-        <Chip 
-          label={chipLabel} 
-          className={styles.chip}
-          size="small"
+      <div className={styles.imageWrapper}>
+        <CardMedia
+          component="img"
+          className={styles.albumImage}
+          image={image}
+          alt={title}
         />
-      </CardContent>
-      <div className={styles.titleContainer}>
-        <h4 className={styles.albumTitle}>{title}</h4>
+        <div className={styles.chipContainer}>
+          <Chip 
+            label={chipLabel} 
+            className={styles.chip}
+            size="small"
+          />
+        </div>
       </div>
+      <CardContent className={styles.cardContent}>
+        <div className={styles.titleContainer}>
+          <h4 className={styles.albumTitle}>{title}</h4>
+        </div>
+      </CardContent>
     </MuiCard>
   );
 };

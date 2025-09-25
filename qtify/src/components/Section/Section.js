@@ -89,7 +89,6 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
 
-        {/* For Songs section we must NOT show the Collapse / Show All button */}
         {!isSongsSection && (
           <button
             onClick={handleCollapseToggle}
@@ -120,7 +119,6 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
             ))}
           </Tabs>
 
-          {/* Songs: always show carousel (no grid option) */}
           <Carousel
             data={filteredSongs}
             component={Card}
@@ -129,7 +127,6 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
         </>
       )}
 
-      {/* Non-song sections */}
       {!isSongsSection && (
         <>
           {collapsed ? (
