@@ -1,25 +1,46 @@
 .carouselContainer {
   position: relative;
-  padding: 0 40px; /* Space for the navigation buttons */
 }
 
-.swiper-container {
-  overflow: visible; /* Allows the navigation buttons to be outside */
-}
-
-.swiperButtonPrev,
-.swiperButtonNext {
+.navButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 10;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-.swiperButtonPrev {
-  left: 0;
+.navButton:hover {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.swiperButtonNext {
-  right: 0;
+.navButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.navLeft {
+  left: -15px; /* Adjust this value */
+}
+
+.navRight {
+  right: -15px; /* Adjust this value */
+}
+
+.swiper {
+  padding: 0 40px; 
+}
+
+.swiper-slide {
+  width: auto !important; 
 }

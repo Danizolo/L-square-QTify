@@ -8,7 +8,7 @@
  * - Version         : 1.0.0
  * - Date            : 23/09/2025
  * - Author          : DHANUSH
- * - Modification    :
+ * - Modification    : Corrected API endpoint and rendering logic.
  **/
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -43,9 +43,8 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
     if (isSongsSection) {
       const fetchGenres = async () => {
         try {
-          const response = await axios.get(
-            "https://qtify-backend.labs.crio.do/genres"
-          );
+          // CORRECTED: The API URL was wrong
+          const response = await axios.get("https://qtify-backend.labs.crio.do/genres");
           setGenres([{ key: "all", label: "All" }, ...response.data.data]);
         } catch (error) {
           console.error("Error fetching genres:", error);
@@ -79,20 +78,19 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
   const cardComponentProps = isSongsSection
     ? { isSongCard: true }
     : { isSongCard: false };
+
   const itemsToDisplay = isSongsSection ? filteredSongs : data;
 
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
-        {!isSongsSection && (
-          <button
-            onClick={handleCollapseToggle}
-            className={styles.collapseButton}
-          >
-            {collapsed ? "Show All" : "Collapse"}
-          </button>
-        )}
+        <button
+          onClick={handleCollapseToggle}
+          className={styles.collapseButton}
+        >
+          {collapsed ? "Show All" : "Collapse"}
+        </button>
       </div>
 
       {isSongsSection && (
@@ -115,7 +113,7 @@ const Section = ({ title, apiUrl, isSongsSection = false }) => {
         </Tabs>
       )}
 
-      {isSongsSection || collapsed ? (
+      {collapsed ? (
         <Carousel
           data={itemsToDisplay}
           component={Card}
