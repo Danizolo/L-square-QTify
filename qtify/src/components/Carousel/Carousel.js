@@ -5,10 +5,10 @@
  * @created          : 24/09/2025 - 08:58:29
  *
  * MODIFICATION LOG
- * - Version         : 1.1.0
+ * - Version         : 1.2.0
  * - Date            : 25/09/2025
- * - Author          : Assistant (fixes for tests)
- * - Modification    : Manage swiper state and pass it to navigation component
+ * - Author          : Assistant (fix for slidesPerGroup issue)
+ * - Modification    : Added slidesPerGroup to match slidesPerView so navigation skips visible set
  **/
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -25,7 +25,6 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 
-  // Guard: ensure data is an array
   const slides = Array.isArray(data) ? data : [];
 
   return (
@@ -34,12 +33,12 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         modules={[Navigation]}
         spaceBetween={40}
         slidesPerView={3}
+        slidesPerGroup={3} // 👈 move 3 at a time
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
           setIsBeginning(swiper.isBeginning);
           setIsEnd(swiper.isEnd);
 
-          // Keep button states updated
           swiper.on("slideChange", () => {
             setIsBeginning(swiper.isBeginning);
             setIsEnd(swiper.isEnd);
@@ -49,17 +48,23 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         breakpoints={{
           600: {
             slidesPerView: 3,
+            slidesPerGroup: 3,
           },
           900: {
             slidesPerView: 5,
+            slidesPerGroup: 5,
           },
           1200: {
             slidesPerView: 7,
+            slidesPerGroup: 7,
           },
         }}
       >
         {slides.map((item) => (
-          <SwiperSlide key={item.id ?? item.title ?? Math.random()} className={styles.swiperSlide}>
+          <SwiperSlide
+            key={item.id ?? item.title ?? Math.random()}
+            className={styles.swiperSlide}
+          >
             <CardComponent {...item} {...cardProps} />
           </SwiperSlide>
         ))}
