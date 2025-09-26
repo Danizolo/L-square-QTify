@@ -5,10 +5,10 @@
  * @created          : 24/09/2025 - 08:58:29
  *
  * MODIFICATION LOG
- * - Version         : 1.2.0
- * - Date            : 25/09/2025
- * - Author          : Assistant (fix for slidesPerGroup issue)
- * - Modification    : Added slidesPerGroup to match slidesPerView so navigation skips visible set
+ * - Version         : 1.3.0
+ * - Date            : 26/09/2025
+ * - Author          : Assistant (fix for test: deterministic slide jumps + overflow fix)
+ * - Modification    : Added slidesPerGroup, deterministic slideTo navigation via CarouselNavigation
  **/
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,12 +33,13 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         modules={[Navigation]}
         spaceBetween={40}
         slidesPerView={3}
-        slidesPerGroup={3} // 👈 move 3 at a time
+        slidesPerGroup={3}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
           setIsBeginning(swiper.isBeginning);
           setIsEnd(swiper.isEnd);
 
+          // Ensure button states update on slide change
           swiper.on("slideChange", () => {
             setIsBeginning(swiper.isBeginning);
             setIsEnd(swiper.isEnd);
@@ -63,7 +64,7 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         {slides.map((item) => (
           <SwiperSlide
             key={item.id ?? item.title ?? Math.random()}
-            className={styles.swiperSlide}
+            /* note: we let Swiper add its own .swiper-slide class; CSS module includes global rules */
           >
             <CardComponent {...item} {...cardProps} />
           </SwiperSlide>

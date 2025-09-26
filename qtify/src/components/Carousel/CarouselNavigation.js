@@ -5,10 +5,10 @@
  * @created          : 24/09/2025 - 08:58:43
  *
  * MODIFICATION LOG
- * - Version         : 1.1.0
- * - Date            : 25/09/2025
- * - Author          : Assistant (fixes for tests)
- * - Modification    : Removed useSwiper dependency; use props for states and ref
+ * - Version         : 1.2.0
+ * - Date            : 26/09/2025
+ * - Author          : Assistant (deterministic navigation jumps)
+ * - Modification    : Use slideTo with calculated target index to ensure deterministic jumps for tests
  **/
 import React from "react";
 import styles from "./Carousel.module.css";
@@ -45,11 +45,42 @@ const RightArrow = () => (
   </svg>
 );
 
-const CarouselNavigation = ({ swiperRef, isBeginning = true, isEnd = false }) => {
+/**
+ * Deterministic navigation:
+ * - We compute the next/prev index using the Swiper params so clicks jump an entire group
+ * - This avoids issues with transitions or partial movement when tests click multiple times quickly
+ */
+const CarouselNavigation = ({
+  swiperRef,
+  isBeginning = true,
+  isEnd = false,
+}) => {
+  const goNext = () => {
+    const s = swiperRef.current;
+    if (!s) return;
+
+    const slidesPerGroup =
+      s.params?.slidesPerGroup ?? s.params?.slidesPerView ?? 1;
+    const slidesPerView = s.params?.slidesPerView ?? 1;
+    const maxIndex = Math.max(0, s.slides.length - slidesPerView);
+    const target = Math.min(s.activeIndex + slidesPerGroup, maxIndex);
+    s.slideTo(target);
+  };
+
+  const goPrev = () => {
+    const s = swiperRef.current;
+    if (!s) return;
+
+    const slidesPerGroup =
+      s.params?.slidesPerGroup ?? s.params?.slidesPerView ?? 1;
+    const target = Math.max(0, s.activeIndex - slidesPerGroup);
+    s.slideTo(target);
+  };
+
   return (
     <>
       <button
-        onClick={() => swiperRef.current?.slidePrev()}
+        onClick={goPrev}
         className={`${styles.navButton} ${styles.navLeft}`}
         disabled={isBeginning}
         aria-label="previous"
@@ -57,7 +88,7 @@ const CarouselNavigation = ({ swiperRef, isBeginning = true, isEnd = false }) =>
         <LeftArrow />
       </button>
       <button
-        onClick={() => swiperRef.current?.slideNext()}
+        onClick={goNext}
         className={`${styles.navButton} ${styles.navRight}`}
         disabled={isEnd}
         aria-label="next"
