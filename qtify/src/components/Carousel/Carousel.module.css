@@ -1,10 +1,7 @@
 .carouselContainer {
   position: relative;
-  /* we do not hide overflow here, so nav buttons that slightly overflow remain visible.
-     Sliding content is inside the .swiper element where we explicitly hide overflow. */
 }
 
-/* Navigation buttons */
 .navButton {
   position: absolute;
   top: 50%;
@@ -26,34 +23,21 @@
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.navButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
 .navLeft {
   left: -15px;
-  /* Adjust this value */
 }
 
 .navRight {
   right: -15px;
-  /* Adjust this value */
 }
 
-/* Swiper container (local class applied to Swiper) */
 .swiper {
   padding: 0 40px;
-  overflow: hidden;
-  /* <-- ensure slides outside visible area are clipped */
+  overflow: hidden; /* ensures hidden slides are not visible */
   box-sizing: border-box;
 }
 
-/* Target Swiper's global slide classes so our styling applies correctly.
-   Use :global because Swiper injects plain "swiper-slide" class at runtime. */
 :global(.swiper-slide) {
   width: auto !important;
-  /* ensure slides don't overflow their container unexpectedly */
   box-sizing: border-box;
 }

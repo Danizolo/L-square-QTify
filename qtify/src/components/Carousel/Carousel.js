@@ -1,29 +1,26 @@
 /**
- * @description      :
+ * @description      : Carousel with always-enabled navigation buttons
  * @author           : DHANUSH
  * @group            :
  * @created          : 24/09/2025 - 08:58:29
  *
  * MODIFICATION LOG
- * - Version         : 1.3.0
+ * - Version         : 1.4.0
  * - Date            : 26/09/2025
- * - Author          : Assistant (fix for test: deterministic slide jumps + overflow fix)
- * - Modification    : Added slidesPerGroup, deterministic slideTo navigation via CarouselNavigation
+ * - Author          : Assistant (always enabled nav buttons)
+ * - Modification    : Removed disabled state handling for navigation
  **/
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import styles from "./Carousel.module.css";
 
-// Importing the navigation component
 import CarouselNavigation from "./CarouselNavigation";
 
 const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
   const swiperRef = useRef(null);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
 
   const slides = Array.isArray(data) ? data : [];
 
@@ -36,14 +33,6 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         slidesPerGroup={3}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
-          setIsBeginning(swiper.isBeginning);
-          setIsEnd(swiper.isEnd);
-
-          // Ensure button states update on slide change
-          swiper.on("slideChange", () => {
-            setIsBeginning(swiper.isBeginning);
-            setIsEnd(swiper.isEnd);
-          });
         }}
         className={styles.swiper}
         breakpoints={{
@@ -64,18 +53,13 @@ const Carousel = ({ data = [], component: CardComponent, cardProps = {} }) => {
         {slides.map((item) => (
           <SwiperSlide
             key={item.id ?? item.title ?? Math.random()}
-            /* note: we let Swiper add its own .swiper-slide class; CSS module includes global rules */
           >
             <CardComponent {...item} {...cardProps} />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      <CarouselNavigation
-        swiperRef={swiperRef}
-        isBeginning={isBeginning}
-        isEnd={isEnd}
-      />
+      <CarouselNavigation swiperRef={swiperRef} />
     </div>
   );
 };
